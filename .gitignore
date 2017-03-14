@@ -1,0 +1,10 @@
+.*
+build/*
+gradle/*
+grad*
+img/*
+!.gitignore
+*.log
+img.tar.gz
+schooldb/*
+

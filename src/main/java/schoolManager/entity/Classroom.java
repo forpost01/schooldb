@@ -1,4 +1,4 @@
-package testdb.entity;
+package schoolManager.entity;
 
 import javax.persistence.*;
 
@@ -10,18 +10,23 @@ import javax.persistence.*;
 //        uniqueConstraints=
 //        @UniqueConstraint(columnNames={"CLASSNAME", "SCHOOL_ID"}))
 public class Classroom {
+    public Classroom() {
+    }
+
+    public Classroom(String className, int numberPupil, String fioTeacher, School school) {
+        this.className = className;
+        this.numberPupil = numberPupil;
+        this.fioTeacher = fioTeacher;
+        this.school = school;
+    }
+
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY )
     private int class_id;
     private String className;
     private int numberPupil;
     private String fioTeacher;
 
-    //@ManyToOne (fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
-    //@JoinColumn(name = "school_id", nullable = false)
-
-
     @ManyToOne
-    //@JoinColumn(name="school_id", nullable=false)
     private School school;
     public School getSchool() { return school; }
 
@@ -68,7 +73,30 @@ public class Classroom {
                 ", className='" + className + '\'' +
                 ", numberPupil=" + numberPupil +
                 ", fioTeacher='" + fioTeacher + '\'' +
-                ", school=" + school.getAccountNumber() +
+                ", school=" + school.getSchool_id() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Classroom that = (Classroom) o;
+
+        if (numberPupil != that.numberPupil) return false;
+        if (school.getSchool_id() != that.school.getSchool_id()) return false;
+        if (className != null ? !className.equals(that.className) : that.className != null) return false;
+        if (fioTeacher != null ? !fioTeacher.equals(that.fioTeacher) : that.fioTeacher != null) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = school.getSchool_id();
+        result = 31 * result + (className != null ? className.hashCode() : 0);
+        result = 31 * result + (fioTeacher != null ? fioTeacher.hashCode() : 0);
+        result = 31 * result + numberPupil;
+        return result;
     }
 }

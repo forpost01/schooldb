@@ -8,6 +8,7 @@ import static schoolManager.utils.HibernateSessionFactory.getSessionFactory;
 
 //static import schoolManager.utils.HibernateSessionFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class SchoolDao {
         getCurrentSession().update(school);
     }
 
-    public School findById(int id) {
+    public School findById(int id) throws SQLException{
         School school = getCurrentSession().get(School.class, id);
         return school;
     }

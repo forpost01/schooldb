@@ -9,6 +9,8 @@ import javax.persistence.*;
 //@Table( name="Classroom",
 //        uniqueConstraints=
 //        @UniqueConstraint(columnNames={"CLASSNAME", "SCHOOL_ID"}))
+//@NamedQuery(name="Classroom.findBySchoolAndName", query="select e from Classroom e " +
+//        "where e.classname=:name") // and e.school_school_id=:id
 public class Classroom {
     public Classroom() {
     }

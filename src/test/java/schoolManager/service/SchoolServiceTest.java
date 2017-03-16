@@ -42,6 +42,12 @@ public class SchoolServiceTest {
     }
 
     @Test
+    public void findByIdBad() throws Exception {
+        School school = schoolService.findById(151);
+        assertEquals(null,school);
+    }
+    
+    @Test
     public void delete() throws Exception {
         assertTrue(schoolService.findById(12) != null);
         schoolService.delete(12);

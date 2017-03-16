@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import schoolManager.dao.SchoolDao;
 import schoolManager.entity.School;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -19,61 +20,69 @@ public class SchoolService {
     }
 
     public void save(School school) {
-        logger.info("save - START");
+        logger.info("School save - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.save(school);
         schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("save - END:" +school);
+        logger.info("School save - END:" +school);
     }
 
     public void update(School school) {
-        logger.info("update - START");
+        logger.info("School update - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.update(school);
         schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("update - END:" + school);
+        logger.info("School update - END:" + school);
     }
 
     public School findById(int id) {
-        School school;
+        School school = null;
         if (id <= 0) {
             logger.info("attempt to find school with wrong ID:" + id);
-            school = null;
         } else {
-            logger.info("findById - START");
+            logger.info("School findById - START");
             schoolDao.openCurrentSession();
-            school = schoolDao.findById(id);
+            try {
+                school = schoolDao.findById(id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             schoolDao.closeCurrentSession();
-            logger.info("findById - END: id=" +id +" - "+school);
+            logger.info("School findById - END: id=" +id +" - "+(school!=null? school:null));
         }
         return school;
     }
 
     public void delete(int id) {
-        logger.info("delete - START");
+        logger.info("School delete - START");
         schoolDao.openCurrentSessionwithTransaction();
-        School school = schoolDao.findById(id);
+        School school = null;
+        try {
+            school = schoolDao.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         schoolDao.delete(school);
         schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("delete - END: "+school.getSchool_id());
+        logger.info("School delete - END: "+school.getSchool_id());
     }
 
     public List<School> findAll() {
-        logger.info("findAll - START");
+        logger.info("School findAll - START");
         schoolDao.openCurrentSession();
         List<School> schools = schoolDao.findAll();
         schoolDao.closeCurrentSession();
-        logger.info("findAll - END: found="+ (schools!=null? schools.size():null));
+        logger.info("School findAll - END: found="+ (schools!=null? schools.size():null));
 
         return schools;
     }
 
     public void deleteAll() {
-        logger.info("deleteAll - START");
+        logger.info("School deleteAll - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.deleteAll();
         schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("deleteAll - END");
+        logger.info("School deleteAll - END");
 
     }
 

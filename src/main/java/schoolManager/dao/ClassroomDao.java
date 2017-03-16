@@ -66,6 +66,15 @@ public class ClassroomDao {
         return classroom;
     }
 
+    public Classroom findBySchoolAndName(int id,String name) {
+        Classroom classroom = (Classroom) getCurrentSession()
+                .createQuery("select e from Classroom e where e.className=:name AND e.school.school_id=:id")
+                .setParameter("name",name)
+                .setParameter("id",id)
+                .getSingleResult();
+        return classroom;
+    }
+
     public void delete(Classroom classroom) {
         getCurrentSession().delete(classroom);
     }

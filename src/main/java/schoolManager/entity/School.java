@@ -26,7 +26,7 @@ public class School {
     @Column(unique = true, nullable = false, length = 20)
     private String accountNumber;
 
-    @OneToMany(mappedBy = "school",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Classroom> classrooms;
 
     public List<Classroom> getClassrooms() {

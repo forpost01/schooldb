@@ -64,7 +64,7 @@ public class SchoolDao {
         getCurrentSession().update(school);
     }
 
-    public School findById(int id) throws SQLException{
+    public School findById(int id) {
         School school = getCurrentSession().get(School.class, id);
         return school;
     }

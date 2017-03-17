@@ -19,52 +19,69 @@ public class SchoolService {
         schoolDao = new SchoolDao();
     }
 
-    public void save(School school) {
+    public boolean save(School school) {
         logger.info("School save - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.save(school);
-        schoolDao.closeCurrentSessionwithTransaction();
+        try {
+            schoolDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("School save - BAD:" + school);
+            e.printStackTrace();
+            return false;
+        }
         logger.info("School save - END:" +school);
+        return true;
     }
 
-    public void update(School school) {
+    public boolean update(School school) {
         logger.info("School update - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.update(school);
-        schoolDao.closeCurrentSessionwithTransaction();
+        try {
+            schoolDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("School update - BAD:" + school);
+            e.printStackTrace();
+            return false;
+        }
         logger.info("School update - END:" + school);
+        return true;
     }
 
     public School findById(int id) {
         School school = null;
         if (id <= 0) {
-            logger.info("attempt to find school with wrong ID:" + id);
+            logger.info("Attempt to find school with wrong ID:" + id);
         } else {
             logger.info("School findById - START");
             schoolDao.openCurrentSession();
-            try {
-                school = schoolDao.findById(id);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            school = schoolDao.findById(id);
             schoolDao.closeCurrentSession();
             logger.info("School findById - END: id=" +id +" - "+(school!=null? school:null));
         }
         return school;
     }
 
-    public void delete(int id) {
+    public boolean delete(int id) {
         logger.info("School delete - START");
         schoolDao.openCurrentSessionwithTransaction();
-        School school = null;
-        try {
-            school = schoolDao.findById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        School school = schoolDao.findById(id);
+        if (school!=null) {
+            schoolDao.delete(school);
+            try {
+                schoolDao.closeCurrentSessionwithTransaction();
+            } catch (Exception e) {
+                logger.info("School delete - BAD: " + school);
+                e.printStackTrace();
+                return false;
+            }
+            logger.info("School delete - END: " + school.getSchool_id());
+            return true;
+        } else {
+            logger.info("School delete - BAD: not in DB");
+            return false;
         }
-        schoolDao.delete(school);
-        schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("School delete - END: "+school.getSchool_id());
     }
 
     public List<School> findAll() {
@@ -77,13 +94,19 @@ public class SchoolService {
         return schools;
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         logger.info("School deleteAll - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.deleteAll();
-        schoolDao.closeCurrentSessionwithTransaction();
-        logger.info("School deleteAll - END");
-
+        try {
+            schoolDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("School deleteAll - BAD: ");
+            e.printStackTrace();
+            return false;
+        }
+        logger.info("School deleteAll - END: ");
+        return true;
     }
 
     public SchoolDao schoolDao() {

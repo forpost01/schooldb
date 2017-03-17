@@ -6,6 +6,8 @@ import schoolManager.dao.SchoolDao;
 import schoolManager.entity.Classroom;
 import schoolManager.entity.School;
 
+import javax.persistence.PersistenceException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -23,31 +25,45 @@ public class ClassroomService {
         schoolService = new SchoolService();
     }
 
-    public void save(Classroom classroom) {
+    public boolean save(Classroom classroom) {
         School school = schoolService.findById(classroom.getSchool().getSchool_id());
         if (school == null) {
-            logger.info("Atempt to save classroom whith wrong school: " + classroom);
+            logger.info("Attempt to save classroom with wrong school: " + classroom);
+            return false;
         } else {
             logger.info("Classroom save - START");
             classroomDao.openCurrentSessionwithTransaction();
             classroomDao.save(classroom);
-            classroomDao.closeCurrentSessionwithTransaction();
+            try {
+                classroomDao.closeCurrentSessionwithTransaction();
+            } catch (Exception e) {
+                logger.info("Classroom save - BAD:" + classroom);
+                e.printStackTrace();
+            }
             logger.info("Classroom save - END:" + classroom);
         }
+        return true;
     }
 
-    public void update(Classroom classroom) {
+    public boolean update(Classroom classroom) {
         logger.info("Classroom update - START");
         classroomDao.openCurrentSessionwithTransaction();
         classroomDao.update(classroom);
-        classroomDao.closeCurrentSessionwithTransaction();
+        try {
+            classroomDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("Classroom update - BAD:" + classroom);
+            logger.debug(e);
+            return false;
+        }
         logger.info("Classroom update - END:" + classroom);
+        return true;
     }
 
     public Classroom findById(int id) {
         Classroom classroom;
         if (id <= 0) {
-            logger.info("attempt to find classroom with wrong ID:" + id);
+            logger.info("Attempt to find classroom with wrong ID:" + id);
             classroom = null;
         } else {
             logger.info("Classroom findById - START");
@@ -74,13 +90,25 @@ public class ClassroomService {
         return classroom;
     }
 
-    public void delete(int id) {
+    public boolean delete(int id) {
         logger.info("Classroom delete - START");
         classroomDao.openCurrentSessionwithTransaction();
         Classroom classroom = classroomDao.findById(id);
-        classroomDao.delete(classroom);
-        classroomDao.closeCurrentSessionwithTransaction();
-        logger.info("Classroom delete - END: " + classroom.getSchool().getSchool_id() + " " + classroom.getClassName());
+        if (classroom!=null) {
+            classroomDao.delete(classroom);
+            try {
+                classroomDao.closeCurrentSessionwithTransaction();
+            } catch (Exception e) {
+                logger.info("Classroom delete - BAD: " + classroom);
+                e.printStackTrace();
+                return false;
+            }
+            logger.info("Classroom delete - END: " + classroom.getSchool().getSchool_id() + " " + classroom.getClassName());
+            return true;
+        } else {
+            logger.info("Classroom delete - BAD: not in DB");
+            return false;
+        }
     }
 
     public List<Classroom> findAll() {
@@ -93,13 +121,19 @@ public class ClassroomService {
         return classrooms;
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         logger.info("Classroom deleteAll - START");
         classroomDao.openCurrentSessionwithTransaction();
         classroomDao.deleteAll();
-        classroomDao.closeCurrentSessionwithTransaction();
+        try {
+            classroomDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("Classroom deleteAll - BAD: ");
+            e.printStackTrace();
+            return false;
+        }
         logger.info("Classroom deleteAll - END");
-
+        return true;
     }
 
     public ClassroomDao classroomDao() {

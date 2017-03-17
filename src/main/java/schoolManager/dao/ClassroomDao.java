@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import schoolManager.entity.Classroom;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static schoolManager.utils.HibernateSessionFactory.getSessionFactory;
@@ -32,7 +33,7 @@ public class ClassroomDao {
         currentSession.close();
     }
 
-    public void closeCurrentSessionwithTransaction() {
+    public void closeCurrentSessionwithTransaction() throws Exception {
         currentTransaction.commit();
         currentSession.close();
     }
@@ -76,7 +77,7 @@ public class ClassroomDao {
     }
 
     public void delete(Classroom classroom) {
-        getCurrentSession().delete(classroom);
+        if (classroom!=null) getCurrentSession().delete(classroom);
     }
 
     @SuppressWarnings("unchecked")

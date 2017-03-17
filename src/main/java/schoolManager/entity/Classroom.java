@@ -1,6 +1,9 @@
 package schoolManager.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Created by forpost on 13.03.17.
@@ -9,8 +12,7 @@ import javax.persistence.*;
 //@Table( name="Classroom",
 //        uniqueConstraints=
 //        @UniqueConstraint(columnNames={"CLASSNAME", "SCHOOL_ID"}))
-//@NamedQuery(name="Classroom.findBySchoolAndName", query="select e from Classroom e " +
-//        "where e.classname=:name") // and e.school_school_id=:id
+@XmlRootElement
 public class Classroom {
     public Classroom() {
     }
@@ -30,6 +32,7 @@ public class Classroom {
 
     @ManyToOne
     private School school;
+    @XmlTransient
     public School getSchool() { return school; }
 
     public void setSchool(School school) {
@@ -43,7 +46,7 @@ public class Classroom {
     public void setId(int class_id) {
         this.class_id = class_id;
     }
-
+    @XmlElement
     public String getClassName() {
         return className;
     }
@@ -52,6 +55,7 @@ public class Classroom {
         this.className = className;
     }
 
+    @XmlElement
     public int getNumberPupil() {
         return numberPupil;
     }
@@ -60,6 +64,7 @@ public class Classroom {
         this.numberPupil = numberPupil;
     }
 
+    @XmlElement
     public String getFioTeacher() {
         return fioTeacher;
     }

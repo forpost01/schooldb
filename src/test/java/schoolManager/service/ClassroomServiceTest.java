@@ -69,6 +69,7 @@ public class ClassroomServiceTest {
         Classroom classroom = classroomService.findById(2);
         assertNotNull(classroom);
         assertTrue(classroomService.delete(classroom.getId()));
+        assertNull(classroomService.findById(2));
     }
 
     @Test
@@ -88,6 +89,11 @@ public class ClassroomServiceTest {
         Classroom classroom1 = classroomService.findBySchoolAndName(classroom.getSchool().getSchool_id()
                 ,classroom.getClassName());
         assertTrue(classroom.equals(classroom1));
+    }
+
+    @Test
+    public void findBySchoolAndNameBad() throws Exception {
+        assertNull(classroomService.findBySchoolAndName(12,"1A1"));
     }
 
     @Ignore

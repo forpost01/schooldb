@@ -2,8 +2,15 @@ package schoolManager.service;
 
 import org.apache.log4j.Logger;
 import schoolManager.dao.SchoolDao;
+import schoolManager.entity.Classroom;
 import schoolManager.entity.School;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -107,6 +114,38 @@ public class SchoolService {
         }
         logger.info("School deleteAll - END: ");
         return true;
+    }
+
+    public void showClassroomOfSchool(int id){
+        School school = findById(id);
+        if (school != null){
+            JAXBContext contextObj = null;
+            try {
+                contextObj = JAXBContext.newInstance(School.class);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+
+            Marshaller marshallerObj = null;
+            try {
+                marshallerObj = contextObj.createMarshaller();
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+            try {
+                marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            } catch (PropertyException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                marshallerObj.marshal(school, new FileOutputStream("school_"+school.getSchool_id()+".xml"));
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public SchoolDao schoolDao() {

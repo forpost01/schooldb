@@ -6,6 +6,7 @@ import schoolManager.dao.SchoolDao;
 import schoolManager.entity.Classroom;
 import schoolManager.entity.School;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,19 +31,29 @@ public class ClassroomService {
         if (school == null) {
             logger.info("Attempt to save classroom with wrong school: " + classroom);
             return false;
-        } else {
-            logger.info("Classroom save - START");
-            classroomDao.openCurrentSessionwithTransaction();
-            classroomDao.save(classroom);
-            try {
-                classroomDao.closeCurrentSessionwithTransaction();
-            } catch (Exception e) {
-                logger.info("Classroom save - BAD:" + classroom);
-                e.printStackTrace();
-            }
-            logger.info("Classroom save - END:" + classroom);
         }
+        //check if classroom already exist in base
+        int school_id = classroom.getSchool().getSchool_id();
+        String classroomName = classroom.getClassName();
+        Classroom classroom1 = findBySchoolAndName(school_id, classroomName);
+        if (null != classroom1) {
+            logger.info("Classroom save - BAD: already in DB " + classroom);
+            return false;
+        }
+
+        logger.info("Classroom save - START");
+        classroomDao.openCurrentSessionwithTransaction();
+        classroomDao.save(classroom);
+        try {
+            classroomDao.closeCurrentSessionwithTransaction();
+        } catch (Exception e) {
+            logger.info("Classroom save - BAD:" + classroom);
+            e.printStackTrace();
+            return false;
+        }
+        logger.info("Classroom save - END:" + classroom);
         return true;
+
     }
 
     public boolean update(Classroom classroom) {
@@ -76,16 +87,20 @@ public class ClassroomService {
     }
 
     public Classroom findBySchoolAndName(int id, String name) {
-        Classroom classroom;
+        Classroom classroom = null;
         if (id <= 0) {
             logger.info("attempt to find classroom with wrong ID:" + id);
-            classroom = null;
         } else {
             logger.info("Classroom findBySchoolAndName - START: school_id " + id + " classroom " + name);
             classroomDao.openCurrentSession();
-            classroom = classroomDao.findBySchoolAndName(id, name);
-            classroomDao.closeCurrentSession();
-            logger.info("Classroom findBySchoolAndName - END: " + classroom);
+            try {
+                classroom = classroomDao.findBySchoolAndName(id, name);
+            } catch (NoResultException e) {
+                //e.printStackTrace();
+            } finally {
+                classroomDao.closeCurrentSession();
+                logger.info("Classroom findBySchoolAndName - END: " + classroom);
+            }
         }
         return classroom;
     }
@@ -94,7 +109,7 @@ public class ClassroomService {
         logger.info("Classroom delete - START");
         classroomDao.openCurrentSessionwithTransaction();
         Classroom classroom = classroomDao.findById(id);
-        if (classroom!=null) {
+        if (classroom != null) {
             classroomDao.delete(classroom);
             try {
                 classroomDao.closeCurrentSessionwithTransaction();

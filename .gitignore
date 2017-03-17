@@ -7,4 +7,5 @@ img/*
 *.log
 img.tar.gz
 schooldb/*
+sch*.xml
 

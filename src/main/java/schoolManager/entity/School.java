@@ -1,12 +1,16 @@
 package schoolManager.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
  * Created by forpost on 13.03.17.
  */
 @Entity
+@XmlRootElement
 public class School {
     public School() {
     }
@@ -25,10 +29,9 @@ public class School {
     private String fioDirector;
     @Column(unique = true, nullable = false, length = 20)
     private String accountNumber;
-
-    @OneToMany(mappedBy = "school",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school",fetch = FetchType.EAGER, orphanRemoval=true)
     private List<Classroom> classrooms;
-
+    @XmlElement
     public List<Classroom> getClassrooms() {
         return classrooms;
     }
@@ -37,6 +40,7 @@ public class School {
         this.classrooms = classrooms;
     }
 
+    @XmlAttribute
     public int getSchool_id() {
         return school_id;
     }

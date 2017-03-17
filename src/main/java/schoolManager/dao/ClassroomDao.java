@@ -67,7 +67,7 @@ public class ClassroomDao {
         return classroom;
     }
 
-    public Classroom findBySchoolAndName(int id,String name) {
+    public Classroom findBySchoolAndName(int id,String name) throws javax.persistence.NoResultException{
         Classroom classroom = (Classroom) getCurrentSession()
                 .createQuery("select e from Classroom e where e.className=:name AND e.school.school_id=:id")
                 .setParameter("name",name)

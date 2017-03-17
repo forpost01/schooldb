@@ -3,7 +3,9 @@ package schoolManager.service;
 import org.junit.Ignore;
 import org.junit.Test;
 import schoolManager.entity.School;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,14 @@ import static org.junit.Assert.*;
  * Created by forpost on 16.03.17.
  */
 public class SchoolServiceTest {
+    @Test
+    public void showClassroomOfSchool() throws Exception {
+        int id=132;
+        schoolService.showClassroomOfSchool(id);
+        assertTrue(FileUtils.readFileToString(new File("school_"+id+".xml"), "UTF-8")
+                .contains("<accountNumber>12312312345"));
+    }
+
     public SchoolService schoolService = new SchoolService();
     @Test
     public void save() throws Exception {

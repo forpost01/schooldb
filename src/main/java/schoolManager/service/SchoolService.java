@@ -11,6 +11,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -139,10 +141,12 @@ public class SchoolService {
             }
 
             try {
-                marshallerObj.marshal(school, new FileOutputStream("school_"+school.getSchool_id()+".xml"));
+                marshallerObj.marshal(school, new OutputStreamWriter (new FileOutputStream("school_"+school.getSchool_id()+".xml"),"UTF-8"));
             } catch (JAXBException e) {
                 e.printStackTrace();
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }

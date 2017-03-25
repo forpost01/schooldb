@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import schoolManager.entity.School;
 
-import static schoolManager.utils.HibernateSessionFactory.getSessionFactory;
+import schoolManager.utils.HibernateSessionFactory;
 
 //static import schoolManager.utils.HibernateSessionFactory;
 
@@ -15,18 +15,22 @@ import java.util.List;
  * Created by forpost on 13.03.17.
  */
 public class SchoolDao {
+    //private HibernateSessionFactory hibernateSessionFactory;
 
+    public SchoolDao(){
+       // hibernateSessionFactory = new HibernateSessionFactory();
+    }
     private Session currentSession;
 
     private Transaction currentTransaction;
 
     public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = HibernateSessionFactory.getSessionFactory().openSession();
         return currentSession;
     }
 
     public Session openCurrentSessionwithTransaction() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = HibernateSessionFactory.getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
         return currentSession;
     }

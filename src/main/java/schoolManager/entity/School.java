@@ -1,16 +1,16 @@
 package schoolManager.entity;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.ws.rs.Path;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
  * Created by forpost on 13.03.17.
  */
 @Entity
-@XmlRootElement
+@XmlRootElement(name = "school")
+//@XmlAccessorType(XmlAccessType.FIELD)
 public class School {
     public School() {
     }

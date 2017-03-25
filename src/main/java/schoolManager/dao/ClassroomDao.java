@@ -3,28 +3,32 @@ package schoolManager.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import schoolManager.entity.Classroom;
+import schoolManager.utils.HibernateSessionFactory;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import static schoolManager.utils.HibernateSessionFactory.getSessionFactory;
 
 /**
  * Created by forpost on 13.03.17.
  */
 public class ClassroomDao {
 
+    public ClassroomDao() {
+        hibernateSessionFactory = new HibernateSessionFactory();    }
+
+    private HibernateSessionFactory hibernateSessionFactory;
+
     private Session currentSession;
 
     private Transaction currentTransaction;
 
     public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = hibernateSessionFactory.getSessionFactory().openSession();
         return currentSession;
     }
 
     public Session openCurrentSessionwithTransaction() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = hibernateSessionFactory.getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
         return currentSession;
     }
@@ -62,7 +66,7 @@ public class ClassroomDao {
         getCurrentSession().update(classroom);
     }
 
-    public Classroom findById(int id) {
+    public Classroom findById(int id) throws Exception {
         Classroom classroom = getCurrentSession().get(Classroom.class, id);
         return classroom;
     }

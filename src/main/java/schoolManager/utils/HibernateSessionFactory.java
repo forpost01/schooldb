@@ -7,11 +7,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 public class HibernateSessionFactory {
 
-    //private static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-   private static SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+   //private static SessionFactory sessionFactory = buildSessionFactory();
 
     protected static SessionFactory buildSessionFactory() {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

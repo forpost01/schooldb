@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 /**
  * Created by forpost on 16.03.17.
  */
+//@Ignore
 public class ClassroomServiceTest {
 
     public SchoolService schoolService = new SchoolService();

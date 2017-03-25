@@ -2,18 +2,19 @@ package schoolManager.service;
 
 import org.apache.log4j.Logger;
 import schoolManager.dao.ClassroomDao;
-import schoolManager.dao.SchoolDao;
 import schoolManager.entity.Classroom;
 import schoolManager.entity.School;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
-import java.sql.SQLException;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
  * Created by forpost on 15.03.17.
  */
+@Path("/class")
 public class ClassroomService {
 
     private static ClassroomDao classroomDao;
@@ -24,6 +25,17 @@ public class ClassroomService {
     public ClassroomService() {
         classroomDao = new ClassroomDao();
         schoolService = new SchoolService();
+    }
+
+    @POST
+    @Path("/post")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveClassroom(Classroom classroom) {
+        logger.info("Attempt to save classroom : " + classroom);
+        boolean status = save(classroom);
+        int code = status ? 201 : 409;
+        String result = "Classroom save : " + status;
+        return Response.status(code).entity(result).build();
     }
 
     public boolean save(Classroom classroom) {
@@ -56,6 +68,16 @@ public class ClassroomService {
 
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/put")
+    public Response updateClassroom(Classroom classroom) {
+        boolean status = update(classroom);
+        int code = status ? 200 : 404;
+        String result = "Classroom update : " + status;
+        return Response.status(code).entity(result).build();
+    }
+
     public boolean update(Classroom classroom) {
         logger.info("Classroom update - START");
         classroomDao.openCurrentSessionwithTransaction();
@@ -71,16 +93,26 @@ public class ClassroomService {
         return true;
     }
 
-    public Classroom findById(int id) {
-        Classroom classroom;
+    @GET
+    @Path("{id: \\d+}")
+    @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
+    public Classroom findById(@PathParam("id") int id) {
+        Classroom classroom = null;
         if (id <= 0) {
             logger.info("Attempt to find classroom with wrong ID:" + id);
-            classroom = null;
         } else {
             logger.info("Classroom findById - START");
             classroomDao.openCurrentSession();
-            classroom = classroomDao.findById(id);
-            classroomDao.closeCurrentSession();
+            try {
+                classroom = classroomDao.findById(id);
+            } catch (Exception e) {
+                logger.info("Classroom findById - BAD: not in DB");
+                //     e.printStackTrace();
+            } finally {
+                classroomDao.closeCurrentSession();
+            }
+
             logger.info("Classroom findById - END: id=" + id + " - " + classroom);
         }
         return classroom;
@@ -105,10 +137,27 @@ public class ClassroomService {
         return classroom;
     }
 
+    @DELETE
+    @Path("/delete/{id: \\d+}")
+    public Response deleteClassroom(@PathParam("id") int id) {
+        boolean status = delete(id);
+        int code = status ? 200 : 204;
+        String result = "Classroom delete : " + status;
+        return Response.status(code).entity(result).build();
+    }
+
     public boolean delete(int id) {
         logger.info("Classroom delete - START");
         classroomDao.openCurrentSessionwithTransaction();
-        Classroom classroom = classroomDao.findById(id);
+        Classroom classroom = null;
+        try {
+            classroom = classroomDao.findById(id);
+        } catch (Exception e) {
+            logger.info("Classroom delete - BAD: not in DB");
+            //classroomDao.closeCurrentSessionwithTransaction();
+            return false;
+            //e.printStackTrace();
+        }
         if (classroom != null) {
             classroomDao.delete(classroom);
             try {
@@ -126,6 +175,9 @@ public class ClassroomService {
         }
     }
 
+    @GET
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8")
+    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8")
     public List<Classroom> findAll() {
         logger.info("Classroom findAll - START");
         classroomDao.openCurrentSession();

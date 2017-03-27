@@ -48,12 +48,10 @@ public class SchoolService {
         logger.info("School save - START");
         schoolDao.openCurrentSessionwithTransaction();
         schoolDao.save(school);
-        JSONObject result = new JSONObject();
         try {
             schoolDao.closeCurrentSessionwithTransaction();
         } catch (Exception e) {
             logger.info("School save - BAD:" + school);
-            e.printStackTrace();
             return false;
         }
         logger.info("School save - END:" + school);
@@ -87,9 +85,10 @@ public class SchoolService {
     }
 
     @GET
-    @Path("{id: \\d+}")
+    //@Path("{id: \\d+}")
     @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-    public School findById(@PathParam("id") int id) {
+    //public School findById(@PathParam("id") int id) {
+    public School findById(@QueryParam("id") int  id) {
         School school = null;
         if (id <= 0) {
             logger.info("Attempt to find school with wrong ID:" + id);
@@ -134,6 +133,7 @@ public class SchoolService {
     }
 
     @GET
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     public List<School> findAll() {
@@ -162,9 +162,11 @@ public class SchoolService {
     }
 
     @GET
-    @Path("/xml/{id: \\d+}")
+    //@Path("/xml/{id: \\d+}")
+    @Path("/xml")
     @Produces(MediaType.APPLICATION_XML)
-    public School getClassroomByXML(@PathParam("id") int id) {
+    //public School getClassroomByXML(@PathParam("id") int id) {
+    public School getClassroomByXML(@QueryParam("id") int id) {
         School school = findById(id);
         return school;
     }

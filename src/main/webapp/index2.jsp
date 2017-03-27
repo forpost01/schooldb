@@ -1,41 +1,64 @@
-%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<!DOCTYPE HTML>
 <html>
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Pojo to Json Serialization using Jersey with MOXy for Java REST Services</title>
+    <%@ page language="java" contentType="text/html;charset=utf-8"%>
+    <title>Java Servlet JSON</title>
+    <script src="js/jquery.1.9.1.min.js"></script>
 
-    <script src="<%=request.getContextPath() %>/js/jquery-1.11.2.min.js"></script>
-    <script>
-        var ctxPath = "<%=request.getContextPath() %>";
-        $(function(){
-            $("#postPerson, #postMessage").on("click", function(){
-                $.ajax({
-                    url: $(this).attr("id") === "postMessage" ? ctxPath+"/rest/school/post" : ctxPath+"/rest/class/post",
-                    type: "POST",
-                    data: '{"className":"11A","numberPupil":32,"fioTeacher":"Дудкина П.","school":45}',
-                    contentType: "application/json",
-                    cache: false,
-                    dataType: "json"
-                });
-            });
-        });
-    </script>
+    <!-- bootstrap just to have good looking page -->
+    <link href="bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+
+    <!-- we code these -->
+    <script src="js/myfunctions.js"></script>
+    <script src="js/jquery-3.2.0.min.js"></script>
 
 </head>
 
 <body>
-<h1>Pojo to Json Serialization using Jersey with MOXy for Java REST Services</h1>
-<ul>
-    <li><a href="<%=request.getContextPath() %>/service/message"><%=request.getContextPath() %>/service/message</a></li>
-    <li><a href="<%=request.getContextPath() %>/service/message/ping"><%=request.getContextPath() %>/service/message/ping</a></li>
-    <li><a href="<%=request.getContextPath() %>/service/person/get"><%=request.getContextPath() %>/service/person/get</a></li>
-    <li><button id="PostSchool">Post School</button></li>
-    <li><button id="Post Classroom">Post Classroom</button></li>
-</ul>
 
+<h1 style="text-align:center">Java Servlet Send & Receive JSON<br></h1>
+
+<!-- article inputs -->
+<div class="article" style="margin:10px;">
+    <div class="input-prepend">
+        <span class="add-on">Номер школы</span>
+        <input class="span4" id="school_id" name="school_id" type="text" placeholder="123">
+    </div>
+    <br/>
+    <div class="input-prepend">
+        <span class="add-on">ФИО</span>
+        <input class="span4" id="fioDirector" name="fioDirector" type="text" placeholder="Иванов...">
+    </div>
+    <br/>
+    <div class="input-prepend">
+        <span class="add-on">адрес</span>
+        <input class="span4" id="address" name="address" type="text" placeholder="Парковая 1">
+    </div>
+    <br/>
+    <div class="input-prepend">
+        <span class="add-on">расчетный счет</span>
+        <input class="span4" id="accountNumber" name="accountNumber" type="text" placeholder="240000597948">
+    </div>
+    <p>
+        <button class="btn btn-primary" type="button" onclick="sendAjax()">Добавить</button>
+    </p>
+</div>
+
+<button class="btn btn-primary" type="button" onclick="callServlet()">Показать</button>
+
+
+<!-- display all articles -->
+<div style="width:700px;padding:20px;S">
+    <h5 style="text-align:center"><i style="color:#ccc"><small>Schools</small></i></h5>
+
+    <table id="added-schools" class="table">
+        <tr>
+            <th>school_id</th>
+            <th>fioDirector</th>
+            <th>address</th>
+            <th>accountNumber</th>
+        </tr>
+    </table>
+</div>
 </body>
-
 </html>

@@ -32,11 +32,16 @@ function callServlet() {
         dataType: "json",
         success: function (data) {
             $("tr:has(td)").remove();
-            console.log(data);
+          //  console.log(data);
 
             $.each(data, function (index, school) {
-                console.log(school);
-     $("#added-schools").append($('<tr/>').append($('<td/>').html("<a href='"+school.school_id+"'>"+school.fioDirector+"</a>")))
+             //   console.log(school);
+     $("#added-schools").append($('<tr/>')
+         .append($('<td/>').html("<a href='rest/schools?id="+school.school_id+"'>"+school.school_id+"</a>"))
+         .append($('<td/>').append($("<span class='label label-info' style='margin:4px;padding:4px' />")).append(school.fioDirector))
+         .append($('<td/>').append($("<span class='label' style='margin:4px;padding:4px' />")).append(school.address))
+         .append($('<td/>').append($("<span class='label label-info' style='margin:4px;padding:4px' />")).append(school.accountNumber))
+        )
                 })
         },
         error: function (data, status, er) {

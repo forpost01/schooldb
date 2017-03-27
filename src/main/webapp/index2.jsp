@@ -53,10 +53,10 @@
 
     <table id="added-schools" class="table">
         <tr>
-            <th>school_id</th>
-            <th>fioDirector</th>
-            <th>address</th>
-            <th>accountNumber</th>
+            <th>номер школы</th>
+            <th>ФИО директора</th>
+            <th>адрес</th>
+            <th>расчетный счет</th>
         </tr>
     </table>
 </div>

@@ -87,7 +87,7 @@ public class ClassroomServiceTest {
     @Test
     public void findBySchoolAndName() throws Exception {
         Classroom classroom = classroomService.findById(1);
-        Classroom classroom1 = classroomService.findBySchoolAndName(classroom.getSchool().getSchool_id()
+        Classroom classroom1 = classroomService.findBySchoolAndName(classroom.getSchool()
                 ,classroom.getClassName());
         assertTrue(classroom.equals(classroom1));
     }

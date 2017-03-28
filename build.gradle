@@ -48,6 +48,7 @@ dependencies {
     compile group: 'com.sun.jersey', name: 'jersey-server', version: '1.19.3'
 // https://mvnrepository.com/artifact/com.sun.jersey/jersey-json
     compile group: 'com.sun.jersey', name: 'jersey-json', version: '1.19.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.3.0'
 
 
 

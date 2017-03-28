@@ -41,7 +41,8 @@ function callServlet() {
          .append($('<td/>').append($("<span class='label label-info' style='margin:4px;padding:4px' />")).append(school.fioDirector))
          .append($('<td/>').append($("<span class='label' style='margin:4px;padding:4px' />")).append(school.address))
          .append($('<td/>').append($("<span class='label label-info' style='margin:4px;padding:4px' />")).append(school.accountNumber))
-        )
+
+     )
                 })
         },
         error: function (data, status, er) {
@@ -49,31 +50,3 @@ function callServlet() {
         }
     });
 }
-
-
-//
-// $("tr:has(td)").remove();
-//
-// $.each(data, function (index, school) {
-//
-//     var td_categories = $("<td/>");
-//     $.each(school.categories, function (i, tag) {
-//         var span = $("<span class='label label-info' style='margin:4px;padding:4px' />");
-//         span.text(tag);
-//         td_categories.append(span);
-//     });
-//
-//     var td_tags = $("<td/>");
-//     $.each(school.tags, function (i, tag) {
-//         var span = $("<span class='label' style='margin:4px;padding:4px' />");
-//         span.text(tag);
-//         td_tags.append(span);
-//     });
-//
-//     $("#added-schools").append($('<tr/>')
-//             .append($('<td/>').html("<a href='"+school.school_id+"'>"+school.fioDirector+"</a>"))
-//         // .append(td_categories)
-//         // .append(td_tags)
-//     );
-//
-// });

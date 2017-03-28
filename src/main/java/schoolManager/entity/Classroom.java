@@ -1,5 +1,8 @@
 package schoolManager.entity;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import schoolManager.service.CustomSchoolDeserializer;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,9 +34,10 @@ public class Classroom {
     private String fioTeacher;
 
     @ManyToOne
+    @JsonDeserialize(using = CustomSchoolDeserializer.class)
     private School school;
-    @XmlTransient
-    public School getSchool() { return school; }
+   // @XmlTransient
+    public Integer getSchool() { return school.getSchool_id(); }
 
     public void setSchool(School school) {
         this.school = school;
@@ -76,11 +80,11 @@ public class Classroom {
     @Override
     public String toString() {
         return "Classroom{" +
-                "id=" + class_id +
+                "class_id=" + class_id +
                 ", className='" + className + '\'' +
                 ", numberPupil=" + numberPupil +
                 ", fioTeacher='" + fioTeacher + '\'' +
-                ", school=" + school.getSchool_id() +
+                ", school=" + ((school != null) ? school.getSchool_id() : null) +
                 '}';
     }
 

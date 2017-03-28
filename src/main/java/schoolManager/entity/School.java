@@ -1,5 +1,10 @@
 package schoolManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.ws.rs.Path;
 import javax.xml.bind.annotation.*;
@@ -10,7 +15,6 @@ import java.util.List;
  */
 @Entity
 @XmlRootElement(name = "school")
-//@XmlAccessorType(XmlAccessType.FIELD)
 public class School {
     public School() {
     }

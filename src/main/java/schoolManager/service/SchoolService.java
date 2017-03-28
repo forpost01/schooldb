@@ -121,7 +121,6 @@ public class SchoolService {
                 schoolDao.closeCurrentSessionwithTransaction();
             } catch (Exception e) {
                 logger.info("School delete - BAD: " + school);
-                e.printStackTrace();
                 return false;
             }
             logger.info("School delete - END: " + school.getSchool_id());
@@ -162,15 +161,17 @@ public class SchoolService {
     }
 
     @GET
-    //@Path("/xml/{id: \\d+}")
     @Path("/xml")
     @Produces(MediaType.APPLICATION_XML)
-    //public School getClassroomByXML(@PathParam("id") int id) {
     public School getClassroomByXML(@QueryParam("id") int id) {
         School school = findById(id);
         return school;
     }
 
+    /**
+     * save all class to XML format file
+     * @param id school
+     */
     public void showClassroomOfSchool(int id) {
         School school = findById(id);
         if (school != null) {

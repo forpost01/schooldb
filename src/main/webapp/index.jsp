@@ -7,7 +7,7 @@
 <p><a href="/rest/schools/all">JSON List of schools</a>
 
 
-<p><a href="/rest/class">JSON list of class</a>
+<p><a href="/rest/class/all">JSON list of class</a>
 <%--<p><a href="/rest/class/1">get class 1</a>--%>
 
 <p><a href="/index2.jsp">Работа с базой школ</a>

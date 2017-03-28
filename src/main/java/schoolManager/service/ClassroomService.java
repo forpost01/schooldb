@@ -31,6 +31,7 @@ public class ClassroomService {
     @Path("/post")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveClassroom(Classroom classroom) {
+        System.out.println(classroom);
         logger.info("Attempt to save classroom : " + classroom);
         boolean status = save(classroom);
         int code = status ? 201 : 409;
@@ -39,13 +40,13 @@ public class ClassroomService {
     }
 
     public boolean save(Classroom classroom) {
-        School school = schoolService.findById(classroom.getSchool().getSchool_id());
+        School school = schoolService.findById(classroom.getSchool());
         if (school == null) {
             logger.info("Attempt to save classroom with wrong school: " + classroom);
             return false;
         }
         //check if classroom already exist in base
-        int school_id = classroom.getSchool().getSchool_id();
+        int school_id = classroom.getSchool();
         String classroomName = classroom.getClassName();
         Classroom classroom1 = findBySchoolAndName(school_id, classroomName);
         if (null != classroom1) {
@@ -94,10 +95,8 @@ public class ClassroomService {
     }
 
     @GET
-    @Path("{id: \\d+}")
     @Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-    public Classroom findById(@PathParam("id") int id) {
+    public Classroom findById(@QueryParam("id") int id) {
         Classroom classroom = null;
         if (id <= 0) {
             logger.info("Attempt to find classroom with wrong ID:" + id);
@@ -108,7 +107,6 @@ public class ClassroomService {
                 classroom = classroomDao.findById(id);
             } catch (Exception e) {
                 logger.info("Classroom findById - BAD: not in DB");
-                //     e.printStackTrace();
             } finally {
                 classroomDao.closeCurrentSession();
             }
@@ -167,7 +165,7 @@ public class ClassroomService {
                 e.printStackTrace();
                 return false;
             }
-            logger.info("Classroom delete - END: " + classroom.getSchool().getSchool_id() + " " + classroom.getClassName());
+            logger.info("Classroom delete - END: " + classroom.getSchool() + " " + classroom.getClassName());
             return true;
         } else {
             logger.info("Classroom delete - BAD: not in DB");
@@ -176,6 +174,7 @@ public class ClassroomService {
     }
 
     @GET
+    @Path("/all")
     @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8")
     @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON + "; charset=UTF-8")
     public List<Classroom> findAll() {
@@ -184,7 +183,6 @@ public class ClassroomService {
         List<Classroom> classrooms = classroomDao.findAll();
         classroomDao.closeCurrentSession();
         logger.info("Classroom findAll - END: found=" + (classrooms != null ? classrooms.size() : null));
-
         return classrooms;
     }
 

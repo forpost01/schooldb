@@ -3,6 +3,7 @@ build/*
 gradle/*
 grad*
 img/*
+target/*
 !.gitignore
 *.log
 img.tar.gz

@@ -29,7 +29,7 @@ public class ClassroomService {
 
     @POST
     @Path("/post")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     public Response saveClassroom(Classroom classroom) {
         System.out.println(classroom);
         logger.info("Attempt to save classroom : " + classroom);
@@ -70,7 +70,7 @@ public class ClassroomService {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     @Path("/put")
     public Response updateClassroom(Classroom classroom) {
         boolean status = update(classroom);

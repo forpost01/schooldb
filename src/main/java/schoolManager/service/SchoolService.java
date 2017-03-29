@@ -36,7 +36,7 @@ public class SchoolService {
 
     @POST
     @Path("/post")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     public Response saveSchool(School school) {
         boolean status = save(school);
         int code = status ? 201 : 409;
@@ -59,7 +59,7 @@ public class SchoolService {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
     @Path("/put")
     public Response updateSchool(School school) {
         boolean status = update(school);

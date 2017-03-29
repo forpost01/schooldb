@@ -2,6 +2,7 @@ insert into SCHOOL (school_id, address, fioDirector, accountNumber) values (12,'
 insert into SCHOOL (school_id, address, fioDirector, accountNumber) values (45,'Vaselkova 12', 'Petrov P.', '2578687534');
 insert into SCHOOL (school_id, address, fioDirector, accountNumber) values (51,'Героев Украины 17', 'Cидоров П.', '123123123945');
 insert into SCHOOL (school_id, address, fioDirector, accountNumber) values (132,'Фрунзе 17', 'Лукашенко П.', '12312312345');
+insert into SCHOOL (school_id, address, fioDirector, accountNumber) values (22,'Рабочая 25', 'Опрятный М.', '98749576');
 
 insert into CLASSROOM (className, numberPupil, fioTeacher, school_school_id) values ('1A',32,'Дудкина П.',12);
 insert into CLASSROOM (className, numberPupil, fioTeacher, school_school_id) values ('2A',30,'Балкина В.',12);
